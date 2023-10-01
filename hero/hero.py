@@ -5,11 +5,13 @@ class hero:
     The hero needs som attributes to define the attack power, defence power, backpack, equipment and health. 
     """
     
-    def __init__(self):
+    def __init__(self, name):
         """
         The constructor sets the default value of the hero class, and also add the default items to the backpack. 
         """
         self.equipment = []
+        self.pos = [0, 0]
+        self.name=name
         self.health = 20
         self.attack = 0
         self.defence = 0
@@ -38,6 +40,9 @@ class hero:
         param: damage: The amount of damage inflicted on hero. 
         return: health: The remaining health of the hero. 
         """
+        if damage - self.defence < 0: 
+            return self.health
+
         if damage < self.health:
             self.health -= (damage -self.defence)
         else:
@@ -63,9 +68,13 @@ class hero:
 
         return: amount: the amount of total attack
         """
+        if self.stand == "defence":
+            self.attack = 2 * self.attack
+            self.defence = self.attack / 1.5
+            self.stand = "attack"
         return self.attack
 
-    def heroMove(self, pos, dir, steps):
+    def heroMove(self, dir, steps):
         """
         Move the hero around the board.
         The board is made of 2d grid pattern described in a list [x,y]. 
@@ -80,20 +89,76 @@ class hero:
         return: pos: the new position in 2d grid. 
         """
         
-        if dir == "l":
-            steps = steps * -1
-            pos[0] += steps
+        if (dir == "l"):
+            self.pos[0] -= steps
         elif dir == "r":
-            pos[0] += steps
+            self.pos[0] += steps
         elif dir == "d":
-            steps = steps * -1
-            pos[1] += steps
+            self.pos[1] -= steps
         elif dir == "u":
-            pos[1] += steps
+            self.pos[1] += steps
 
-        return pos
+        return self.pos
         
-
+       
 if __name__ == "__main__":
-    hercules = hero()
-    print(hercules.heroMove([5,5], "d", 1))
+    """
+        IF the file is executed, the following test is performed: 
+        1) Test picking up loot
+        2) The hero should take dmg
+        3) The hero should go in defence mode
+        4) The hero should go in attack mode
+        5) The hero should move in a direction 
+        """
+    # Pre test
+    ## The main hero 
+    hercules = hero("Hercules")
+    item = "Rotten flesh"
+    hercules.attack = 2
+    hercules.defence = 2
+
+    ## Secondary Hero to perform the required actions
+    monster = hero("Dr. Evil")
+    monster.attack = 3
+    monster.defence = 1
+
+    # Test 1)
+    print("\n1) Hero pickups items")
+    hercules.heroPickup(item)
+    print(hercules.name + " backpack now has the following items: " + str(hercules.backpack))
+
+    # Test 2) 
+    print("\n2) The hero should take dmg")
+    print(hercules.name + " has " + str(hercules.health) + " health")
+    dmg = hercules.health - hercules.heroDamage(monster.heroAttack())
+    print(hercules.name + " takes " + str(dmg) + " in damage")
+    print(hercules.name + " has " + str(hercules.health) + " health")
+    
+    # Test 3) 
+    print("\n3) The hero should go in defence mode")
+    hercules.heroDefence()
+    print(hercules.name + " is now in stands: " + hercules.stand)
+    print(hercules.name + " has " + str(hercules.health) + " health")
+    dmg = hercules.health - hercules.heroDamage(monster.heroAttack())
+    print(hercules.name + " takes " + str(dmg) + " in damage")
+    print(hercules.name + " has " + str(hercules.health) + " health")
+
+    # Test 4) 
+    print("\n4) The hero should go in attack mode")
+    print(monster.name + " has " + str(monster.health) + " health")
+    dmg = monster.health - monster.heroDamage(hercules.heroAttack())
+    print(hercules.name + " takes " + str(dmg) + " in damage")
+    print(monster.name + " has " + str(monster.health) + " health")
+
+    # Test 5) 
+    print("\n5) The hero should move in a direction ")
+    print(hercules.name + " current position is: " + str(hercules.pos))
+    print(hercules.name + " new position is: " + str(hercules.heroMove("l", 1)))
+    print(hercules.name + " current position is: " + str(hercules.pos))
+    print(hercules.name + " new position is: " + str(hercules.heroMove("r", 1)))
+    print(hercules.name + " current position is: " + str(hercules.pos))
+    print(hercules.name + " new position is: " + str(hercules.heroMove("u", 1)))
+    print(hercules.name + " current position is: " + str(hercules.pos))
+    print(hercules.name + " new position is: " + str(hercules.heroMove("d", 1)))
+
+ 
