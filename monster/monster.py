@@ -11,7 +11,7 @@ class Monster:
     """
 
     
-    def __init__(self, health, defence, strength, steps) -> None:
+    def __init__(self, health, defence, strength, steps, name) -> None:
         """
         name: __init__
         description: The constructor of the monster class. 
@@ -22,6 +22,7 @@ class Monster:
         param: steps: The amount of steps the monster can take each turn. 
         """
         self.__health__     = health
+        self.__name__       = name
         self.__defence__    = defence
         self.__strength__   = strength
         self.__steps__      = steps
