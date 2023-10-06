@@ -31,6 +31,7 @@ class hero:
             self.backpack.append(item)
         
         return len(self.backpack)
+    
 
     def heroDamage(self, damage):
         """
@@ -49,6 +50,7 @@ class hero:
             self.health = 0
         
         return self.health
+    
 
     def heroDefence(self):
         """
@@ -73,6 +75,7 @@ class hero:
             self.defence = self.attack / 1.5
             self.stand = "attack"
         return self.attack
+
 
     def heroMove(self, dir, steps):
         """
